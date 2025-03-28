@@ -187,6 +187,28 @@ class SmallStep {
         }
     }
 
+    static final class While extends Statement {
+        final Expression condition;
+        final Statement body;
+
+        While(Expression condition, Statement body) {
+            this.condition = condition;
+            this.body = body;
+        }
+
+        @Override StatementResult reduce(Environment env) {
+            return new StatementResult(
+                    new If(condition,
+                            new Sequence(body, this),
+                            new DoNothing())
+                    , env);
+        }
+
+        @Override public String toString() {
+            return String.format("while ( %s ) { %s }", condition, body);
+        }
+    }
+
     static final class LessThan extends Expression {
         final Expression left;
         final Expression right;

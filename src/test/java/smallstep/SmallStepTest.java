@@ -1,10 +1,11 @@
 package smallstep;
 
 import org.junit.jupiter.api.Test;
-import smallstep.SmallStep.AbstractMachine;
+
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static smallstep.SmallStep.asNumber;
+import static smallstep.SmallStep.*;
 
 class SmallStepTest {
 
@@ -45,7 +46,7 @@ class SmallStepTest {
     }
 
     @Test void evaluate_mult() {
-        var exp = new SmallStep.Mult(
+        var exp = new Mult(
                 asNumber(5),
                 asNumber(3)
         );
@@ -61,7 +62,7 @@ class SmallStepTest {
 
         var exp = new SmallStep.Add(
                 asNumber(1),
-                new SmallStep.Variable("y")
+                new Variable("y")
         );
 
         var result = AbstractMachine.evaluate(exp, env);
@@ -70,7 +71,7 @@ class SmallStepTest {
     }
 
     @Test void assignment() {
-        var stmt = new SmallStep.Assignment(
+        var stmt = new Assignment(
                 "x",
                 new SmallStep.Add(
                         asNumber(1),
@@ -84,8 +85,8 @@ class SmallStepTest {
 
     @Test void test_if() {
         var stmt = new SmallStep.If(
-                new SmallStep.LessThan(
-                        new SmallStep.Mult(
+                new LessThan(
+                        new Mult(
                                 asNumber(2), asNumber(0)
                         ),
                         new SmallStep.Add(
@@ -93,16 +94,27 @@ class SmallStepTest {
                         )
                 ),
                 new SmallStep.Sequence(
-                        new SmallStep.Assignment("x", asNumber(1)),
-                        new SmallStep.Assignment("y", asNumber(2))),
+                        new Assignment("x", asNumber(1)),
+                        new Assignment("y", asNumber(2))),
                 new SmallStep.Sequence(
-                        new SmallStep.Assignment("x", asNumber(3)),
-                        new SmallStep.Assignment("y", asNumber(4))
+                        new Assignment("x", asNumber(3)),
+                        new Assignment("y", asNumber(4))
                 ));
 
         var result = AbstractMachine.evaluate(stmt);
 
         assertThat(result.get("x")).isEqualTo(asNumber(1));
         assertThat(result.get("y")).isEqualTo(asNumber(2));
+    }
+
+    @Test void reduce_while() {
+        var env = new Environment(Map.of("x", asNumber(0)));
+        var stmt = new SmallStep.While(
+                new LessThan(new Variable("x"), asNumber(4)),
+                new Assignment("x", new Add(new Variable("x"), asNumber(1)))
+        );
+
+        var result = AbstractMachine.evaluate(stmt, env);
+        assertThat(result.get("x")).isEqualTo(asNumber(4));
     }
 }
