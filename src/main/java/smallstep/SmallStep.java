@@ -154,6 +154,35 @@ class SmallStep {
         }
     }
 
+    static final class If extends Statement {
+
+        final Expression condition;
+        final Statement consequence;
+        final Statement alternative;
+
+        If(Expression condition, Statement consequence, Statement alternative) {
+            this.condition = condition;
+            this.consequence = consequence;
+            this.alternative = alternative;
+        }
+
+        @Override StatementResult reduce(Environment env) {
+            if (condition.reducible())
+                return new StatementResult(
+                        new If(
+                                condition.reduce(env),
+                                consequence,
+                                alternative
+                        ),
+                        env
+
+                );
+            if (condition.equals(asNumber(0)))
+                return new StatementResult(alternative, env);
+            return new StatementResult(consequence, env);
+        }
+    }
+
     static final class LessThan extends Expression {
         final Expression left;
         final Expression right;
