@@ -154,6 +154,27 @@ class SmallStep {
         }
     }
 
+    static final class LessThan extends Expression {
+        final Expression left;
+        final Expression right;
+
+        LessThan(Expression left, Expression right) {
+            this.left = left;
+            this.right = right;
+        }
+
+        @Override Expression reduce(Environment env) {
+            if (left.reducible())
+                return new LessThan(left.reduce(env), right);
+            if (right.reducible())
+                return new LessThan(left, right.reduce(env));
+
+            if (asNumber(left).value < asNumber(right).value)
+                return asNumber(1); // TRUE
+            return asNumber(0); // FALSE
+        }
+    }
+
 
     static abstract sealed class Expression {
         boolean reducible() {
