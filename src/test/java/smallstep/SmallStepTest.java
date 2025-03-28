@@ -54,4 +54,18 @@ class SmallStepTest {
 
         assertThat(result).isEqualTo(asNumber(15));
     }
+
+    @Test void evaluate_variable() {
+        var env = new SmallStep.Environment();
+        env.set("y", asNumber(15));
+
+        var exp = new SmallStep.Add(
+                asNumber(1),
+                new SmallStep.Variable("y")
+        );
+
+        var result = AbstractMachine.evaluate(exp, env);
+
+        assertThat(result).isEqualTo(asNumber(16));
+    }
 }
