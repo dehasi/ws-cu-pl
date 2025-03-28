@@ -29,6 +29,10 @@ class SmallStep {
         public Environment copy() {
             return new Environment(new HashMap<>(map));
         }
+
+        @Override public String toString() {
+            return map.toString();
+        }
     }
 
     static class AbstractMachine {
@@ -38,7 +42,7 @@ class SmallStep {
 
         static Environment evaluate(Statement stmt, Environment env) {
             while (stmt.reducible()) {
-                System.out.printf("%s, %s", stmt, env);
+                System.out.printf("%s, %s\n", stmt, env);
                 var result = stmt.reduce(env);
                 stmt = result.statement();
                 env = result.environment();
@@ -86,6 +90,10 @@ class SmallStep {
         @Override StatementResult reduce(Environment env) {
             throw new IllegalStateException("DoNothing is not reducible");
         }
+
+        @Override public String toString() {
+            return "do-nothing";
+        }
     }
 
     static final class Assignment extends Statement {
@@ -113,6 +121,10 @@ class SmallStep {
                         newEnv
                 );
             }
+        }
+
+        @Override public String toString() {
+            return String.format("%s = %s", name, expression);
         }
     }
 
