@@ -7,7 +7,13 @@ import java.util.Objects;
 class SmallStep {
 
     static class Environment {
-        Map<String, Expression> map = new HashMap<>();
+        final Map<String, Expression> map;
+
+        Environment(Map<String, Expression> map) {this.map = map;}
+
+        public Environment() {
+            this(new HashMap<>());
+        }
 
         void set(String name, Expression value) {
             map.put(name, value);
@@ -18,6 +24,10 @@ class SmallStep {
                     map.get(name),
                     "Nothing found for name: " + name
             );
+        }
+
+        public Environment copy() {
+            return new Environment(new HashMap<>(map));
         }
     }
 
@@ -40,6 +50,53 @@ class SmallStep {
             return e.reduce(env);
         }
     }
+
+    record StatementResult(
+            Statement statement, Environment environment
+    ) {}
+
+    static sealed abstract class Statement {
+        boolean reducible() {
+            return true;
+        }
+
+        abstract StatementResult reduce(Environment env);
+    }
+
+    static final class DoNothing extends Statement {
+        @Override StatementResult reduce(Environment env) {
+            return null;
+        }
+    }
+
+    static final class Assignment extends Statement {
+        final String name;
+        final Expression expression;
+
+        Assignment(String name, Expression expression) {
+            this.name = name;
+            this.expression = expression;
+        }
+
+        @Override StatementResult reduce(Environment env) {
+
+            if (expression.reducible()) {
+                return new StatementResult(
+                        new Assignment(name, expression.reduce(env)),
+                        env
+                );
+            } else {
+                var newEnv = env.copy();
+                newEnv.set(name, expression);
+
+                return new StatementResult(
+                        new DoNothing(),
+                        newEnv
+                );
+            }
+        }
+    }
+
 
     static abstract sealed class Expression {
         boolean reducible() {
@@ -134,9 +191,9 @@ class SmallStep {
 
         @Override Expression reduce(Environment env) {
             if (left.reducible())
-                return new Add(left.reduce(env), right);
+                return new Mult(left.reduce(env), right);
             if (right.reducible())
-                return new Add(left, right.reduce(env));
+                return new Mult(left, right.reduce(env));
 
             return new Number(
                     asNumber(left).value * asNumber(right).value
