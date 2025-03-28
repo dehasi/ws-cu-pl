@@ -128,6 +128,32 @@ class SmallStep {
         }
     }
 
+    static final class Sequence extends Statement {
+        final Statement first;
+        final Statement second;
+
+        Sequence(Statement first, Statement second) {
+            this.first = first;
+            this.second = second;
+        }
+
+        @Override StatementResult reduce(Environment env) {
+            if (first.reducible()) {
+                StatementResult firstReduced = first.reduce(env);
+                return new StatementResult(
+                        new Sequence(
+                                firstReduced.statement(),
+                                second), firstReduced.environment()
+                );
+            }
+            return new StatementResult(second, env);
+        }
+
+        @Override public String toString() {
+            return String.format("%s; %s", first, second);
+        }
+    }
+
 
     static abstract sealed class Expression {
         boolean reducible() {
