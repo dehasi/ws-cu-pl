@@ -81,4 +81,28 @@ class SmallStepTest {
 
         assertThat(result.get("x")).isEqualTo(asNumber(4));
     }
+
+    @Test void test_if() {
+        var stmt = new SmallStep.If(
+                new SmallStep.LessThan(
+                        new SmallStep.Mult(
+                                asNumber(2), asNumber(0)
+                        ),
+                        new SmallStep.Add(
+                                asNumber(2), asNumber(0)
+                        )
+                ),
+                new SmallStep.Sequence(
+                        new SmallStep.Assignment("x", asNumber(1)),
+                        new SmallStep.Assignment("y", asNumber(2))),
+                new SmallStep.Sequence(
+                        new SmallStep.Assignment("x", asNumber(3)),
+                        new SmallStep.Assignment("y", asNumber(4))
+                ));
+
+        var result = AbstractMachine.evaluate(stmt);
+
+        assertThat(result.get("x")).isEqualTo(asNumber(1));
+        assertThat(result.get("y")).isEqualTo(asNumber(2));
+    }
 }

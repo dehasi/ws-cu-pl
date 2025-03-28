@@ -181,6 +181,10 @@ class SmallStep {
                 return new StatementResult(alternative, env);
             return new StatementResult(consequence, env);
         }
+
+        @Override public String toString() {
+            return String.format("if (%s) { %s } else { %s }", condition, consequence, alternative);
+        }
     }
 
     static final class LessThan extends Expression {
@@ -201,6 +205,10 @@ class SmallStep {
             if (asNumber(left).value < asNumber(right).value)
                 return asNumber(1); // TRUE
             return asNumber(0); // FALSE
+        }
+
+        @Override public String toString() {
+            return String.format("%s < %s", left, right);
         }
     }
 
