@@ -68,4 +68,17 @@ class SmallStepTest {
 
         assertThat(result).isEqualTo(asNumber(16));
     }
+
+    @Test void assignment() {
+        var stmt = new SmallStep.Assignment(
+                "x",
+                new SmallStep.Add(
+                        asNumber(1),
+                        asNumber(3)
+                ));
+
+        var result = AbstractMachine.evaluate(stmt);
+
+        assertThat(result.get("x")).isEqualTo(asNumber(4));
+    }
 }

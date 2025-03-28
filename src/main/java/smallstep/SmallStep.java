@@ -32,6 +32,21 @@ class SmallStep {
     }
 
     static class AbstractMachine {
+        static Environment evaluate(Statement stmt) {
+            return evaluate(stmt, new Environment());
+        }
+
+        static Environment evaluate(Statement stmt, Environment env) {
+            while (stmt.reducible()) {
+                System.out.printf("%s, %s", stmt, env);
+                var result = stmt.reduce(env);
+                stmt = result.statement();
+                env = result.environment();
+            }
+            System.out.printf("%s, %s", stmt, env);
+            return env;
+        }
+
         static Expression evaluate(Expression e) {
             return evaluate(e, new Environment());
         }
@@ -64,8 +79,12 @@ class SmallStep {
     }
 
     static final class DoNothing extends Statement {
+        @Override boolean reducible() {
+            return false;
+        }
+
         @Override StatementResult reduce(Environment env) {
-            return null;
+            throw new IllegalStateException("DoNothing is not reducible");
         }
     }
 
