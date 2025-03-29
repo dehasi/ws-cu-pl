@@ -89,9 +89,9 @@ class Denotational {
         @Override public String toJS() {
             return String.format("(e) => {" +
                                  " if( (%s)(e) ) {" +
-                                 " return (%s)(e)" +
-                                 "} else { " +
-                                 " return (%s)(e)" +
+                                 " return (%s)(e);" +
+                                 " } else { " +
+                                 " return (%s)(e); }" +
                                  "}", condition.toJS(), consequence.toJS(), alternative.toJS());
         }
 

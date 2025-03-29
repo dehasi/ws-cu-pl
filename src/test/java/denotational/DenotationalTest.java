@@ -1,6 +1,5 @@
 package denotational;
 
-
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
@@ -102,4 +101,31 @@ class DenotationalTest {
         System.out.println(result);
         assertThat(result).isEqualTo("Map(1) { 'x' => 4 }");
     }
+
+    @Test void evaluate_if() {
+        var stmt = new If(
+                new LessThan(
+                        new Mult(
+                                asNumber(2), asNumber(0)
+                        ),
+                        new Add(
+                                asNumber(2), asNumber(0)
+                        )
+                ),
+                new Sequence(
+                        new Assignment("x", asNumber(1)),
+                        new Assignment("y", asNumber(2))),
+                new Sequence(
+                        new Assignment("x", asNumber(3)),
+                        new Assignment("y", asNumber(4))
+                ));
+
+        var code = stmt.toJS();
+
+        System.out.println(code);
+        var result = JSRunner.run(code, Map.of());
+        System.out.println(result);
+        assertThat(result).isEqualTo("Map(2) { 'x' => 1, 'y' => 2 }");
+    }
+
 }
