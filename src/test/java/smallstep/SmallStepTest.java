@@ -83,7 +83,7 @@ class SmallStepTest {
         assertThat(result.get("x")).isEqualTo(asNumber(4));
     }
 
-    @Test void test_if() {
+    @Test void reduce_if() {
         var stmt = new SmallStep.If(
                 new LessThan(
                         new Mult(
