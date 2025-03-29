@@ -82,7 +82,11 @@ class BigStep {
     record While(Expression condition, Statement body) implements Statement {
 
         @Override public Environment evaluate(Environment env) {
-            return null; // TBD
+            var result = condition.evaluate(env);
+            if (result.equals(new Bool(false)))
+                return env;
+            var new_env = body.evaluate(env);
+            return this.evaluate(new_env);
         }
 
         @Override public String toString() {
