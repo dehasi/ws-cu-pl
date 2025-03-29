@@ -1,6 +1,10 @@
 package denotational;
 
+
 import denotational.Denotational.Add;
+import denotational.Denotational.LessThan;
+import denotational.Denotational.Mult;
+import denotational.Denotational.Variable;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
@@ -46,5 +50,46 @@ class DenotationalTest {
         var result = JSRunner.run(code, Map.of());
         System.out.println(result);
         assertThat(result).isEqualTo("10");
+    }
+
+    @Test void evaluate_mult() {
+        var exp = new Mult(asNumber(5), asNumber(3));
+
+        var code = exp.toJS();
+
+        System.out.println(code);
+        var result = JSRunner.run(code, Map.of());
+        System.out.println(result);
+        assertThat(result).isEqualTo("15");
+    }
+
+    @Test void evaluate_variable() {
+        var env = Map.of("y", "15");
+        var exp = new Add(asNumber(1), new Variable("y"));
+
+        var code = exp.toJS();
+
+        System.out.println(code);
+        var result = JSRunner.run(code, env);
+        System.out.println(result);
+        assertThat(result).isEqualTo("16");
+    }
+
+    @Test void evaluate_lessThan() {
+        var exp = new LessThan(asNumber(5), asNumber(3));
+        var code = exp.toJS();
+
+        System.out.println(code);
+        var result = JSRunner.run(code, Map.of());
+        System.out.println(result);
+        assertThat(result).isEqualTo("false");
+
+        exp = new LessThan(asNumber(3), asNumber(5));
+        code = exp.toJS();
+
+        System.out.println(code);
+        result = JSRunner.run(code, Map.of());
+        System.out.println(result);
+        assertThat(result).isEqualTo("true");
     }
 }
