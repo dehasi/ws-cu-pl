@@ -1,0 +1,5 @@
+package denotational;
+
+class DenotationalTest {
+
+}
