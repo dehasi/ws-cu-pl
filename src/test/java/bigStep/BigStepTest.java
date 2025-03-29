@@ -2,6 +2,7 @@ package bigStep;
 
 import bigStep.BigStep.Add;
 import bigStep.BigStep.Environment;
+import bigStep.BigStep.Mult;
 import org.junit.jupiter.api.Test;
 
 import static bigStep.BigStep.asNumber;
@@ -41,5 +42,13 @@ class BigStepTest {
         var result = exp.evaluate(EMPTY);
 
         assertThat(result).isEqualTo(asNumber(10));
+    }
+
+    @Test void evaluate_mult() {
+        var exp = new Mult(asNumber(5), asNumber(3));
+
+        var result = exp.evaluate(EMPTY);
+
+        assertThat(result).isEqualTo(asNumber(15));
     }
 }
