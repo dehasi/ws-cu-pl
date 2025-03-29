@@ -7,7 +7,7 @@ import java.util.Map;
 import static java.util.stream.Collectors.joining;
 
 class JSRunner {
-    static String run(String code, Map<String, Object> env) {
+    static String run(String code, Map<String, String> env) {
         var jsEnv = env.isEmpty()?"": env.entrySet().stream()
                 .map(kv -> String.format("'%s',%s", kv.getKey(), kv.getValue()))
                 .collect(joining(",", "[", "]"));

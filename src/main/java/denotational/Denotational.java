@@ -108,7 +108,7 @@ class Denotational {
         }
 
         @Override public String toJS() {
-            return String.format("(e) ={ return %s; }", value);
+            return String.format("(e) => { return %s; }", value);
         }
 
         @Override public String toString() {
@@ -126,7 +126,7 @@ class Denotational {
         }
 
         @Override public String toJS() {
-            return String.format("(e) ={ return %s; }", value);
+            return String.format("(e) => { return %s; }", value);
         }
     }
 
@@ -140,7 +140,7 @@ class Denotational {
         }
 
         @Override public String toJS() {
-            return String.format("(e) ={ return e.get('%s'); }", name);
+            return String.format("(e) => { return e.get('%s'); }", name);
         }
     }
 
