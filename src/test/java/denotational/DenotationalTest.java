@@ -128,4 +128,17 @@ class DenotationalTest {
         assertThat(result).isEqualTo("Map(2) { 'x' => 1, 'y' => 2 }");
     }
 
+    @Test void evaluate_while() {
+        var stmt = new While(
+                new LessThan(new Variable("x"), asNumber(4)),
+                new Assignment("x", new Add(new Variable("x"), asNumber(1)))
+        );
+
+        var code = stmt.toJS();
+
+        System.out.println(code);
+        var result = JSRunner.run(code, Map.of("x", "0"));
+        System.out.println(result);
+        assertThat(result).isEqualTo("Map(1) { 'x' => 4 }");
+    }
 }

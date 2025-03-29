@@ -111,7 +111,7 @@ class Denotational {
         }
 
         @Override public String toJS() {
-            return "";
+            return String.format(" (e) => { while( ((%s)(e)) ) {  e = ((%s)(e)); } return e; }", condition.toJS(), body.toJS());
         }
 
         @Override public String toString() {
