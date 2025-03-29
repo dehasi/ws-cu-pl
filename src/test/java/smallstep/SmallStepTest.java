@@ -57,7 +57,7 @@ class SmallStepTest {
     }
 
     @Test void evaluate_variable() {
-        var env = new SmallStep.Environment();
+        var env = new Environment();
         env.set("y", asNumber(15));
 
         var exp = new SmallStep.Add(
@@ -93,10 +93,10 @@ class SmallStepTest {
                                 asNumber(2), asNumber(0)
                         )
                 ),
-                new SmallStep.Sequence(
+                new Sequence(
                         new Assignment("x", asNumber(1)),
                         new Assignment("y", asNumber(2))),
-                new SmallStep.Sequence(
+                new Sequence(
                         new Assignment("x", asNumber(3)),
                         new Assignment("y", asNumber(4))
                 ));
@@ -109,7 +109,7 @@ class SmallStepTest {
 
     @Test void reduce_while() {
         var env = new Environment(Map.of("x", asNumber(0)));
-        var stmt = new SmallStep.While(
+        var stmt = new While(
                 new LessThan(new Variable("x"), asNumber(4)),
                 new Assignment("x", new Add(new Variable("x"), asNumber(1)))
         );
