@@ -2,6 +2,8 @@ package bigStep;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Map;
+
 import static bigStep.BigStep.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -100,5 +102,17 @@ class BigStepTest {
 
         assertThat(result.get("x")).isEqualTo(asNumber(1));
         assertThat(result.get("y")).isEqualTo(asNumber(2));
+    }
+
+    @Test void evaluate_while() {
+        var env = new Environment(Map.of("x", asNumber(0)));
+        var stmt = new While(
+                new LessThan(new Variable("x"), asNumber(4)),
+                new Assignment("x", new Add(new Variable("x"), asNumber(1)))
+        );
+
+        var result = stmt.evaluate(env);
+
+        assertThat(result.get("x")).isEqualTo(asNumber(4));
     }
 }
