@@ -48,7 +48,16 @@ class BigStep {
         @Override public String toString() {
             return String.valueOf(value);
         }
+    }
 
+    record Bool(boolean value) implements Expression {
+        @Override public Expression evaluate(Environment env) {
+            return this;
+        }
+
+        @Override public String toString() {
+            return String.valueOf(value);
+        }
     }
 
     record Variable(String name) implements Expression {
@@ -83,4 +92,30 @@ class BigStep {
         }
     }
 
+    record Mult(Expression left, Expression right) implements Expression {
+
+        @Override public Expression evaluate(Environment env) {
+            var l = left.evaluate(env);
+            var r = right.evaluate(env);
+            return new Number(
+                    asNumber(l).value * asNumber(r).value);
+        }
+
+        @Override public String toString() {
+            return String.format("%s * %s", left, right);
+        }
+    }
+
+    record LessThan(Expression left, Expression right) implements Expression {
+
+        @Override public Expression evaluate(Environment env) {
+            var l = left.evaluate(env);
+            var r = right.evaluate(env);
+            return new Bool(asNumber(l).value < asNumber(r).value);
+        }
+
+        @Override public String toString() {
+            return String.format("%s < %s", left, right);
+        }
+    }
 }
