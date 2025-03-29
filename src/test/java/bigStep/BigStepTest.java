@@ -3,6 +3,7 @@ package bigStep;
 import bigStep.BigStep.Add;
 import bigStep.BigStep.Environment;
 import bigStep.BigStep.Mult;
+import bigStep.BigStep.Variable;
 import org.junit.jupiter.api.Test;
 
 import static bigStep.BigStep.asNumber;
@@ -50,5 +51,16 @@ class BigStepTest {
         var result = exp.evaluate(EMPTY);
 
         assertThat(result).isEqualTo(asNumber(15));
+    }
+
+    @Test void evaluate_variable() {
+        var env = new Environment();
+        env.set("y", asNumber(15));
+
+        var exp = new Add(asNumber(1), new Variable("y"));
+
+        var result = exp.evaluate(env);
+
+        assertThat(result).isEqualTo(asNumber(16));
     }
 }

@@ -62,7 +62,7 @@ class BigStep {
 
     record Variable(String name) implements Expression {
         @Override public Expression evaluate(Environment env) {
-            return this;
+            return env.get(name);
         }
 
         @Override public String toString() {
