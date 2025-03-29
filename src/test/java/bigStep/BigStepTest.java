@@ -28,12 +28,8 @@ class BigStepTest {
 
     @Test void evaluate_add_a_lot() {
         var exp = new Add(
-                new Add(
-                        asNumber(1),
-                        asNumber(2)),
-                new Add(
-                        asNumber(3),
-                        asNumber(4))
+                new Add(asNumber(1), asNumber(2)),
+                new Add(asNumber(3), asNumber(4))
         );
 
         var result = exp.evaluate(EMPTY);
@@ -52,7 +48,6 @@ class BigStepTest {
     @Test void evaluate_variable() {
         var env = new Environment();
         env.set("y", asNumber(15));
-
         var exp = new Add(asNumber(1), new Variable("y"));
 
         var result = exp.evaluate(env);
