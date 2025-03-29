@@ -39,6 +39,8 @@ class Denotational {
     interface Statement {
         Environment evaluate(Environment env);
 
+        String toJS();
+
     }
 
     record Assignment(String name, Expression expression) implements Statement {
@@ -46,6 +48,10 @@ class Denotational {
             var new_env = env.copy();
             new_env.set(name, expression.evaluate(env));
             return new_env;
+        }
+
+        @Override public String toJS() {
+            return String.format("(e) => { const n_e = new Map(e); n_e.set('%s', ((%s)(e))); return n_e; }", name, expression.toJS());
         }
 
         @Override public String toString() {
@@ -57,6 +63,11 @@ class Denotational {
         @Override public Environment evaluate(Environment env) {
             Environment new_env = first.evaluate(env);
             return second.evaluate(new_env);
+        }
+
+        @Override public String toJS() {
+
+            return String.format("(e) => { return (%s)((%s)(e)) }", second.toJS(), first.toJS());
         }
 
         @Override public String toString() {
@@ -75,6 +86,15 @@ class Denotational {
             throw new IllegalStateException("Expected Bool, got: " + result);
         }
 
+        @Override public String toJS() {
+            return String.format("(e) => {" +
+                                 " if( (%s)(e) ) {" +
+                                 " return (%s)(e)" +
+                                 "} else { " +
+                                 " return (%s)(e)" +
+                                 "}", condition.toJS(), consequence.toJS(), alternative.toJS());
+        }
+
         @Override public String toString() {
             return String.format("if (%s) { %s } else { %s }", condition, consequence, alternative);
         }
@@ -88,6 +108,10 @@ class Denotational {
                 return env;
             var new_env = body.evaluate(env);
             return this.evaluate(new_env);
+        }
+
+        @Override public String toJS() {
+            return "";
         }
 
         @Override public String toString() {

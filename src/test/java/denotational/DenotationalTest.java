@@ -1,15 +1,11 @@
 package denotational;
 
 
-import denotational.Denotational.Add;
-import denotational.Denotational.LessThan;
-import denotational.Denotational.Mult;
-import denotational.Denotational.Variable;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-import static denotational.Denotational.asNumber;
+import static denotational.Denotational.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class DenotationalTest {
@@ -91,5 +87,19 @@ class DenotationalTest {
         result = JSRunner.run(code, Map.of());
         System.out.println(result);
         assertThat(result).isEqualTo("true");
+    }
+
+    @Test void assignment() {
+        var stmt = new Assignment(
+                "x",
+                new Add(asNumber(1), asNumber(3))
+        );
+
+        var code = stmt.toJS();
+
+        System.out.println(code);
+        var result = JSRunner.run(code, Map.of());
+        System.out.println(result);
+        assertThat(result).isEqualTo("Map(1) { 'x' => 4 }");
     }
 }
