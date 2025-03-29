@@ -1,0 +1,131 @@
+= Programing Language
+
+== Some Intro
+
+
+....
+Programing Language = Syntax + Semantics
+....
+
+Syntax => How a language looks like
+
+Semantics => What a language does
+
+== Semantics
+
+There are lot's of ways to describe what a language does, i.e., specification by:
+
+* implementation - Ruby
+* documentation - Java, C++
+* operation - describing abstract machine, we'll do today, tomorrow
+* One more, we'll talk later
+
+== Operational Semantics: Small Step
+
+Reducing AST, one step at time.
+
+=== Mathematical Descriptions
+
+.Addition
+[stem]
+++++
+
+\frac{(e_1, \sigma) \rightarrow (e_1', \sigma)}
+{(e_1 + e_2, \sigma) \rightarrow (e_1' + e_2, \sigma)}
+
+
+\frac{(e_2, \sigma) \rightarrow (e_2', \sigma)}
+{(v_1 + e_2, \sigma) \rightarrow (v_1 + e_2', \sigma)}
+
+
+\frac{}
+{n_1 + n_2 = n} if  (n_1 + n_2, \sigma) \rightarrow n
+++++
+
+.Multiplication
+[stem]
+++++
+
+\frac{(e_1, \sigma) \rightarrow (e_1', \sigma)}
+{(e_1 * e_2, \sigma) \rightarrow (e_1' * e_2, \sigma)}
+
+
+\frac{(e_2, \sigma) \rightarrow (e_2', \sigma)}
+{(v_1 * e_2, \sigma) \rightarrow (v_1 * e_2', \sigma)}
+
+
+\frac{}
+{n_1 * n_2 = n} if  (n_1 * n_2, \sigma) \rightarrow n
+++++
+
+.Less Than
+[stem]
+++++
+
+\frac{(e_1, \sigma) \rightarrow (e_1', \sigma)}
+{(e_1 < e_2, \sigma) \rightarrow (e_1' < e_2, \sigma)}
+
+
+\frac{(e_2, \sigma) \rightarrow (e_2', \sigma)}
+{(v_1 < e_2, \sigma) \rightarrow (v_1 < e_2', \sigma)}
+
+
+\frac{}
+{(n_1 < n_2, \sigma) \rightarrow \text{true}} if n_1 < n_2
+
+
+\frac{}
+{(n_1 < n_2, \sigma) \rightarrow \text{false}} if n_1 \geq n_2
+++++
+
+.Variable Lookup
+[stem]
+++++
+\frac{}
+{(x, \sigma) \rightarrow \sigma(x)} if x \in \text{dom}(\sigma)
+++++
+
+.Assignment
+[stem]
+++++
+\frac{(e, \sigma) \rightarrow (e', \sigma)}
+{(x = e, \sigma) \rightarrow (x = e', \sigma)}
+
+
+\frac{}
+{(x = v, \sigma) \rightarrow (\text{do-nothing}, \sigma[x \mapsto v])}
+++++
+
+.If-Else Statement
+[stem]
+++++
+\frac{(e, \sigma) \rightarrow (e', \sigma)}
+{( \text{if} (e) {s_1} \text{ else } {s_2}, \sigma) \rightarrow ( \text{if}(e'){s_1} \text{ else }{s_2}, \sigma)}
+
+
+\frac{}
+{(\text{if (true) } {s_1} \text{ else } {s_2}, \sigma) \rightarrow (s_1, \sigma)}
+
+
+\frac{}
+{(\text{if (true) } {s_1} \text{ else } {s_2}, \sigma) \rightarrow (s_2, \sigma)}
+++++
+
+.Sequencing
+[stem]
+++++
+\frac{(s_1, \sigma) \rightarrow (s_1', \sigma')}
+{(s_1; s_2, \sigma) \rightarrow (s_1'; s_2, \sigma')}
+
+
+\frac{}
+{(\text{do-nothing}; s_2, \sigma) \rightarrow (s_2, \sigma)}
+++++
+
+.While Loop
+[stem]
+++++
+\frac{}
+{(\text{while (e)}\{  s\}, \sigma) \rightarrow
+(\text{if } (e) {s; \text{while}(e){s}} \text{ else do-nothing}, \sigma)}
+++++
