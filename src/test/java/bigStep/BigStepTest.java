@@ -1,12 +1,8 @@
 package bigStep;
 
-import bigStep.BigStep.Add;
-import bigStep.BigStep.Environment;
-import bigStep.BigStep.Mult;
-import bigStep.BigStep.Variable;
 import org.junit.jupiter.api.Test;
 
-import static bigStep.BigStep.asNumber;
+import static bigStep.BigStep.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class BigStepTest {
@@ -62,5 +58,15 @@ class BigStepTest {
         var result = exp.evaluate(env);
 
         assertThat(result).isEqualTo(asNumber(16));
+    }
+
+    @Test void evaluate_lessThan() {
+        var exp = new LessThan(asNumber(5), asNumber(3));
+        var result = exp.evaluate(EMPTY);
+        assertThat(result).isEqualTo(new Bool(false));
+
+        exp = new LessThan(asNumber(3), asNumber(5));
+        result = exp.evaluate(EMPTY);
+        assertThat(result).isEqualTo(new Bool(true));
     }
 }
