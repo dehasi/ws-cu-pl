@@ -129,3 +129,19 @@ Reducing AST, one step at time.
 {(\text{while (e)}\{  s\}, \sigma) \rightarrow
 (\text{if } (e) {s; \text{while}(e){s}} \text{ else do-nothing}, \sigma)}
 ++++
+
+
+
+== Literature
+
+* https://computationbook.com/[Understanding Computation], Tom Stuart
+* https://craftinginterpreters.com/[Crafting Interpreters], Robert Nylstrom
+* https://www.goodreads.com/en/book/show/515602.Software_Tools_in_Pascal[Software Tools in Pascal], Brian W. Kernighan
+
+
+People are also reccomeding, but I didn't read
+
+* https://compilerbook.com/[Writing A Compiler In Go], Torsten Ball
+* https://interpreterbook.com/[Writing An Interpreter In Go], Torsten Balls
+
+Have fun!
