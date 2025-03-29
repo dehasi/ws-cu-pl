@@ -18,7 +18,7 @@ class SmallStepTest {
     }
 
     @Test void evaluate_add() {
-        var exp = new SmallStep.Add(
+        var exp = new Add(
                 asNumber(1),
                 asNumber(3)
         );
@@ -29,12 +29,12 @@ class SmallStepTest {
     }
 
     @Test void evaluate_add_a_lot() {
-        var exp = new SmallStep.Add(
-                new SmallStep.Add(
+        var exp = new Add(
+                new Add(
                         asNumber(1),
                         asNumber(2)
                 ),
-                new SmallStep.Add(
+                new Add(
                         asNumber(3),
                         asNumber(4)
                 )
@@ -60,7 +60,7 @@ class SmallStepTest {
         var env = new Environment();
         env.set("y", asNumber(15));
 
-        var exp = new SmallStep.Add(
+        var exp = new Add(
                 asNumber(1),
                 new Variable("y")
         );
@@ -73,7 +73,7 @@ class SmallStepTest {
     @Test void assignment() {
         var stmt = new Assignment(
                 "x",
-                new SmallStep.Add(
+                new Add(
                         asNumber(1),
                         asNumber(3)
                 ));
@@ -89,7 +89,7 @@ class SmallStepTest {
                         new Mult(
                                 asNumber(2), asNumber(0)
                         ),
-                        new SmallStep.Add(
+                        new Add(
                                 asNumber(2), asNumber(0)
                         )
                 ),
