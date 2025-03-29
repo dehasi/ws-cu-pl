@@ -33,4 +33,18 @@ class DenotationalTest {
         System.out.println(result);
         assertThat(result).isEqualTo("4");
     }
+
+    @Test void evaluate_add_a_lot() {
+        var exp = new Add(
+                new Add(asNumber(1), asNumber(2)),
+                new Add(asNumber(3), asNumber(4))
+        );
+
+        var code = exp.toJS();
+
+        System.out.println(code);
+        var result = JSRunner.run(code, Map.of());
+        System.out.println(result);
+        assertThat(result).isEqualTo("10");
+    }
 }
