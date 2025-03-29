@@ -64,4 +64,41 @@ class BigStepTest {
         result = exp.evaluate(EMPTY);
         assertThat(result).isEqualTo(new Bool(true));
     }
+
+    @Test void assignment() {
+        var stmt = new Assignment(
+                "x",
+                new Add(
+                        asNumber(1),
+                        asNumber(3)
+                ));
+
+        var result = stmt.evaluate(EMPTY);
+
+        assertThat(result.get("x")).isEqualTo(asNumber(4));
+    }
+
+    @Test void evaluate_if() {
+        var stmt = new If(
+                new LessThan(
+                        new Mult(
+                                asNumber(2), asNumber(0)
+                        ),
+                        new Add(
+                                asNumber(2), asNumber(0)
+                        )
+                ),
+                new Sequence(
+                        new Assignment("x", asNumber(1)),
+                        new Assignment("y", asNumber(2))),
+                new Sequence(
+                        new Assignment("x", asNumber(3)),
+                        new Assignment("y", asNumber(4))
+                ));
+
+        var result = stmt.evaluate(EMPTY);
+
+        assertThat(result.get("x")).isEqualTo(asNumber(1));
+        assertThat(result.get("y")).isEqualTo(asNumber(2));
+    }
 }
