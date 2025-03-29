@@ -36,6 +36,61 @@ class BigStep {
         }
     }
 
+    interface Statement {
+        Environment evaluate(Environment env);
+    }
+
+    record Assignment(String name, Expression expression) implements Statement {
+        @Override public Environment evaluate(Environment env) {
+            var new_env = env.copy();
+            new_env.set(name, expression.evaluate(env));
+            return new_env;
+        }
+
+        @Override public String toString() {
+            return String.format("%s = %s", name, expression);
+        }
+    }
+
+    record Sequence(Statement first, Statement second) implements Statement {
+        @Override public Environment evaluate(Environment env) {
+            Environment new_env = first.evaluate(env);
+            return second.evaluate(new_env);
+        }
+
+        @Override public String toString() {
+            return String.format("%s; %s", first, second);
+        }
+    }
+
+    record If(Expression condition, Statement consequence, Statement alternative) implements Statement {
+        @Override public Environment evaluate(Environment env) {
+            var result = condition.evaluate(env);
+            if (result.equals(new Bool(true)))
+                return consequence.evaluate(env);
+
+            if (result.equals(new Bool(false)))
+                return alternative.evaluate(env);
+            throw new IllegalStateException("Expected Bool, got: " + result);
+        }
+
+        @Override public String toString() {
+            return String.format("if (%s) { %s } else { %s }", condition, consequence, alternative);
+        }
+    }
+
+    record While(Expression condition, Statement body) implements Statement {
+
+        @Override public Environment evaluate(Environment env) {
+            return null; // TBD
+        }
+
+        @Override public String toString() {
+            return String.format("while ( %s ) { %s }", condition, body);
+        }
+    }
+
+
     interface Expression {
         Expression evaluate(Environment env);
     }
