@@ -10,7 +10,7 @@ class Parser {
 
     /*
     EXP: EXP | TERM
-    TERM: N | V
+    TERM: N | V | (EXP)
     N: 0|1|2
     V: a|b
     * */
@@ -39,6 +39,12 @@ class Parser {
         }
         if (isAlphabetic(tokens[i])) {
             return new BigStep.Variable(String.valueOf(tokens[i++]));
+        }
+        if (nextIs('(')) {
+            i++;
+            var e = parseExp();
+            i++; // consume ")"
+            return e;
         }
 
         return null;
